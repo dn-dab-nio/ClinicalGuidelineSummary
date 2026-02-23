@@ -1,0 +1,17 @@
+# Virtual environment
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# Vector databases
+vectorstore/
+vector_db/
+
+# Env files
+.env
