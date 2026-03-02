@@ -1,9 +1,6 @@
 from langchain_ollama import OllamaLLM
 
-llm = OllamaLLM(model="llama3.2:latest")
-
-
-def generate_initial_answer(query, context):
+def generate_answer(query, context):
     prompt = f"""
 You are a medical assistant.
 Answer ONLY based on the provided context.
@@ -20,7 +17,7 @@ Answer:
     return llm.invoke(prompt)
 
 
-def check_completeness(answer):
+def evaluate_answer(answer):
     prompt = f"""
 Evaluate the following answer.
 
@@ -33,13 +30,13 @@ Answer:
     return llm.invoke(prompt)
 
 
-def generate_followup_query(query, answer):
+def generate_followup_query(og_query, previous_answer):
     prompt = f"""
 The original question was:
-{query}
+{og_query}
 
 The current answer is incomplete:
-{answer}
+{previous_answer}
 
 Generate ONE focused follow-up search query
 that would retrieve the missing medical information.
@@ -47,22 +44,5 @@ Only output the query.
 """
     return llm.invoke(prompt)
 
+llm = OllamaLLM(model="llama3.2:latest")
 
-def generate_final_answer(query, contexts):
-    combined_context = "\n\n".join(contexts)
-
-    prompt = f"""
-You are a clinical guideline assistant.
-
-Answer ONLY using the information in the context below.
-Do NOT add external knowledge.
-
-Context:
-{combined_context}
-
-Question:
-{query}
-
-Final Answer:
-"""
-    return llm.invoke(prompt)

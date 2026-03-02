@@ -1,9 +1,9 @@
-from src.rag.Investigation import pdf_to_documents
+from src.scripts.pdf_loader import pdf_to_documents
 from src.rag.Embeddings import import_embedding_llm
 from src.rag.Vector_store import create_vector_store, save_vector_store
 import os
 
-data_folder = "data"
+data_folder = r"C:\Users\Natalia\Desktop\Projekty_python\ClinicalGuidelineSummary\data"
 pdf_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder)]
 docs = pdf_to_documents(pdf_files)
 

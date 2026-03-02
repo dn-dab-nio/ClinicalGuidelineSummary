@@ -6,6 +6,6 @@ def create_vector_store(docs, embeddings):
 def save_vector_store(vectorstore, path="vectorstore"):
     vectorstore.save_local(path)
 
-def load_vector_store(path="vectorstore"):
-    return FAISS.load_local(path)
+def load_vector_store(path, embeddings):
+    return FAISS.load_local(path, embeddings, allow_dangerous_deserialization=True)
 

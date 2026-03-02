@@ -3,9 +3,9 @@ from PyPDF2 import PdfReader
 from langchain_core.documents import Document
 from pdf2image import convert_from_path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-#PDF + OCR + CHUNKING
 
 pytesseract.pytesseract.tesseract_cmd = "C:/Users/Natalia/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
+
 def extract_text_from_pdf(path):
     reader = PdfReader(path)
     texts = []
