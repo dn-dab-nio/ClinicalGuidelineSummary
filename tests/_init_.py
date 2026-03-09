@@ -40,9 +40,10 @@ from src.staging.uicc_mapper import map_uicc
 from src.staging.uicc_extractor import tnm_extract
 from src.rag.Vector_store import load_vector_store
 from src.rag.Embeddings import import_embedding_llm
+from src.staging.uicc_validator import validate_json
 
-embeddings = import_embedding_llm()
-vectorstore = load_vector_store(r"C:\Users\Natalia\Desktop\Projekty_python\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
+#embeddings = import_embedding_llm()
+#vectorstore = load_vector_store(r"C:\Users\Natalia\Desktop\Projekty_python\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
 
 query = f"""
 Pacjentka w wieku 56 lat, bez znanej historii nowotworów tarczycy w rodzinie, 
@@ -53,9 +54,12 @@ System for Reporting Thyroid Cytopathology przypisano kategorię V (podejrzenie
 raka pęcherzykowego)
 """
 
-answer = tnm_extract(query)
+#answer = tnm_extract(query)
 #answer = map_uicc(query)
-print(answer)
+#print(answer)
 
-
+parsed_answer = {'age': 56, 'T': 'T1', 'N': 'N10', 'M': 'M0', 'cancer_type': {'label': 'Podejrzana raka pęcherzykowa', 'group': 'Differentiated thyroid carcinoma'}}
+is_valid, message = validate_json(parsed_answer)
+if not is_valid:
+    print({"error": message})
 

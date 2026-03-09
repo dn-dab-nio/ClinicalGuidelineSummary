@@ -1,6 +1,8 @@
 from src.rag.Vector_store import load_vector_store
 from src.rag.Embeddings import import_embedding_llm
 from src.rag.rag_engine import run_iterative_rag
+from src.staging.staging_pipeline import run_staging
+from src.rag.query_compiler import build_data_query
 
 embeddings = import_embedding_llm()
 vectorstore = load_vector_store(r"C:\Users\Natalia\Desktop\Projekty_python\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
@@ -14,8 +16,13 @@ zgodnie z The Bethesda System for Reporting Thyroid Cytopathology przypisano kat
 Wypisz mi wytyczne kliniczne dla pacjentki.
 """
 
-answer = run_iterative_rag(vectorstore, query)
+classification_uicc = run_staging(query)
+print("--- CLASSIFICATION UICC/UJCC, 8th edition ---")
+print(classification_uicc)
 
-print("---FINAL ANSWER---")
-print(answer)
+new_query = build_data_query(classification_uicc)
+#quidelines = run_iterative_rag(vectorstore, query)
+
+#print("--- THERAPY FOR PATIENT---")
+#print(quidelines)
 

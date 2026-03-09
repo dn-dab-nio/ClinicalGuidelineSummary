@@ -34,7 +34,7 @@ JSON format:
     "T": "",
     "N": "",
     "M": "",
-    "Cancer_type": 
+    "cancer_type": 
     {{
         "label": "",
         "group": ""
