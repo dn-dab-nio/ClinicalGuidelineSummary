@@ -10,7 +10,8 @@ Extract TNM classification information from the patient description according to
 Rules:
 - If patient's type of cancer is described -> fill Cancer_type
 - If patient's age is described -> fill age
-- If tumor size or local invasion is described -> fill T with ONLY T feature - look at the greatest dimension - stay within limits of classification
+- If tumor size or local invasion is described -> fill T with ONLY T feature - look at the greatest dimension in query
+- Do not round up limits in tumor size - STAY IN LIMITS
 - If lymph nodes are described -> fill N with only N feature
 - If distant metastases are described -> fill M with only M feature
 - If information in patient description is missing -> write: INSUFFICIENT_INFORMATION

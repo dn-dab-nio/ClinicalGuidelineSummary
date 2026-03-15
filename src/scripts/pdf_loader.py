@@ -3,6 +3,7 @@ from PyPDF2 import PdfReader
 from langchain_core.documents import Document
 from pdf2image import convert_from_path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+import os
 
 pytesseract.pytesseract.tesseract_cmd = "C:/Users/Natalia/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
 
@@ -37,11 +38,35 @@ def chunk_text(text):
     print(f"Liczba chunków: {len(chunks)}")
     return chunks
 
+def detect_organisation(path):
+    filename = os.path.basename(path).lower()
+
+    if "ata" in filename:
+        return "ATA"
+    elif "nccn" in filename:
+        return "NCCN"
+    elif "kom" in filename:
+        return "KOM"
+    elif "esmo" in filename:
+        return "ESMO"
+    elif "bta" in filename:
+        return "BTA"
+    else:
+        return None
+
+
 def pdf_to_documents(paths):
     docs = []
     for path in paths:
+        org = detect_organisation(path)
         text = extract_text_from_pdf(path)
         chunks = chunk_text(text)
-        docs.extend([Document(page_content=chunk) for chunk in chunks])
+        docs.extend([Document(
+            page_content=chunk,
+            metadata={
+                "organisation": org,
+                "source": os.path.basename(path)
+            }
+        ) for chunk in chunks])
     return docs
 

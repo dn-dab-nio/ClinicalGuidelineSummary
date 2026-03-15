@@ -1,20 +1,28 @@
 from langchain_ollama import OllamaLLM
 
-def generate_answer(query, context):
+def generate_guideline_answer(context, classification_json, organisation):
     prompt = f"""
-You are a medical assistant.
-Answer ONLY based on the provided context.
+You are clinical guideline assistant.
+Use ONLY the following context from {organisation} guidelines.
 If information is missing, say: "INSUFFICIENT INFORMATION".
 
-Context:
-{context}
+Context: {context}
 
-Question:
-{query}
+Patient classification:
+{classification_json}
 
-Answer:
+Provide concise recommendations according to {organisation} guidelines.
+Do not include recommendations from other organisations.
+
+Answer must be focused on:
+* What recommended - best recommendations
+* To consider - recommendations that doctor should consider
+* What not recommended - bad options for patient's therapy
+
+Answer MUST contain these 3 requirements.
 """
-    return llm.invoke(prompt)
+    response = llm.invoke(prompt)
+    return response
 
 
 def evaluate_answer(answer):
@@ -44,5 +52,5 @@ Only output the query.
 """
     return llm.invoke(prompt)
 
-llm = OllamaLLM(model="llama3.2:latest")
+llm = OllamaLLM(model="medllama2")
 
