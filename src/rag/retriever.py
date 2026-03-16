@@ -1,4 +1,4 @@
-def retrieve_context(vectorstore, query, k=3, organisation=None):
+def retrieve_context(vectorstore, query: str, k:int=3, organisation:str=None) -> str:
 
     if organisation:
         retrieved_docs = vectorstore.similarity_search(

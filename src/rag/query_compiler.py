@@ -1,4 +1,4 @@
-def build_data_query(data_json):
+def build_data_query(data_json: dict) -> str:
     return f"""
 Provide evidence-based clinical management recommendations for the following patient with:
 
@@ -12,3 +12,4 @@ Provide evidence-based clinical management recommendations for the following pat
 Use clinical guidelines from sources you have in vectorstore.
 Focus on treatment.
 """
+

@@ -2,7 +2,6 @@ from src.rag.Vector_store import load_vector_store
 from src.rag.Embeddings import import_embedding_llm
 from src.rag.rag_engine import run_iterative_rag
 from src.staging.staging_pipeline import run_staging
-from src.rag.query_compiler import build_data_query
 
 embeddings = import_embedding_llm()
 vectorstore = load_vector_store(r"C:\Users\Natalia\Desktop\Projekty_python\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)

@@ -21,16 +21,24 @@ Answer must be focused on:
 
 Answer MUST contain these 3 requirements.
 """
+
+
     response = llm.invoke(prompt)
     return response
 
 
-def evaluate_answer(answer):
+def evaluate_answer(answer, base_query, context):
     prompt = f"""
 Evaluate the following answer.
 
 If it fully answers the question and is based only on the provided context, respond with: COMPLETE.
 If important medical information is missing, respond with: INCOMPLETE.
+
+Question: 
+{base_query}
+
+Context: 
+{context}
 
 Answer:
 {answer}

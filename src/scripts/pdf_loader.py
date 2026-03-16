@@ -38,21 +38,16 @@ def chunk_text(text):
     print(f"Liczba chunków: {len(chunks)}")
     return chunks
 
-def detect_organisation(path):
-    filename = os.path.basename(path).lower()
 
-    if "ata" in filename:
-        return "ATA"
-    elif "nccn" in filename:
-        return "NCCN"
-    elif "kom" in filename:
-        return "KOM"
-    elif "esmo" in filename:
-        return "ESMO"
-    elif "bta" in filename:
-        return "BTA"
-    else:
-        return None
+def detect_organisation(path):
+    org_names = ["ATA", "NCCN", "KOM", "ESMO", "BTA"]
+    filename = os.path.basename(path).upper()
+
+    for org in org_names:
+        if org in filename:
+            return org
+
+    return None
 
 
 def pdf_to_documents(paths):
