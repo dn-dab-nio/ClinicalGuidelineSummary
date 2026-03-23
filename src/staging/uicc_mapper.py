@@ -1,9 +1,10 @@
+from src.staging.uicc_validator import Json
 
-def map_uicc_dtc(data):
-    age = data["age"]
-    T = data["T"]
-    N = data["N"]
-    M = data["M"]
+def map_uicc_dtc(data: Json) -> str:
+    age = data.age
+    T = data.T
+    N = data.N
+    M = data.M
 
     if None in [age, T, N, M]:
         return "INSUFFICIENT_INFORMATION"
@@ -28,11 +29,11 @@ def map_uicc_dtc(data):
     else:
         return "INVALID_AGE"
 
-def map_uicc_mtc(data):
-    age = data["age"]
-    T = data["T"]
-    N = data["N"]
-    M = data["M"]
+def map_uicc_mtc(data: Json) -> str:
+    age = data.age
+    T = data.T
+    N = data.N
+    M = data.M
 
     if None in [age, T, N, M]:
         return "INSUFFICIENT_INFORMATION"
@@ -54,11 +55,11 @@ def map_uicc_mtc(data):
             return "Stage IVB"
 
 
-def map_uicc_utc(data):
-    age = data["age"]
-    T = data["T"]
-    N = data["N"]
-    M = data["M"]
+def map_uicc_utc(data: Json) -> str:
+    age = data.age
+    T = data.T
+    N = data.N
+    M = data.M
 
     if None in [age, T, N, M]:
         return "INSUFFICIENT_INFORMATION"
@@ -73,9 +74,9 @@ def map_uicc_utc(data):
         if T in ["T3b","T4a", "T4b"]:
             return "Stage IVB"
 
-def map_uicc(patient_description):
+def map_uicc(patient_description: Json) -> dict:
 
-    cancer_group = patient_description["cancer_type"]["group"]
+    cancer_group = patient_description.cancer_type.group
 
     if cancer_group == "Differentiated thyroid carcinoma":
         stage = map_uicc_dtc(patient_description)
@@ -84,8 +85,10 @@ def map_uicc(patient_description):
     elif cancer_group == "Anaplastic thyroid carcinoma":
         stage = map_uicc_utc(patient_description)
     else:
-        return "INSUFFICIENT_INFORMATION"
+        stage =  "INSUFFICIENT_INFORMATION"
 
-    patient_description["stage"] = stage
+    patient_description = patient_description.model_dump()
+    patient_description["Stage"] = stage
+    print(f"Po zmapowaniu jsona i dodaniu stage w mapper, zostaje on przekonwertowany na dict. Czy model_dump usunal mi dane z Cancer_type?: \n {patient_description} \n Jeśli tak, trzeba to naprawić :)")
     return patient_description
 

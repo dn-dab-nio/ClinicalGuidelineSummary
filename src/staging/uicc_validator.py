@@ -10,10 +10,9 @@ class CancerType(BaseModel):
 class Json(BaseModel):
     age: Optional[int]
     T: Optional[Literal["T1", "T1a", "T1b", "T2", "T3", "T3a", "T3b", "T4", "T4a", "T4b", "INSUFFICIENT_INFORMATION"]]
-    N: Optional[Literal["N0", "N0a", "N0b", "N1", "N1a", "N1b", "NX", "INSUFFICIENT_INFORMATION"]]
-    M: Optional[Literal["M0", "M1", "INSUFFICIENT_INFORMATION"]]
+    N: Optional[Literal["Nx", "NX", "N0", "N0a", "N0b", "N1", "N1a", "N1b","INSUFFICIENT_INFORMATION"]]
+    M: Optional[Literal["Mx", "MX", "M0", "M1", "INSUFFICIENT_INFORMATION"]]
     cancer_type: CancerType
-    Stage: Optional[str]
 
     @field_validator('age')
     def validate_age(cls, value):
@@ -27,14 +26,14 @@ class Json(BaseModel):
                         "Medullary thyroid carcinoma",
                         "Anaplastic thyroid carcinoma"
                         ]
-        if value not in valid_groups:
-            raise ValueError(f"Cancer group: {value} is not valid")
+        if value.group not in valid_groups:
+            raise ValueError(f"Cancer group: {value.group} is not valid")
+        return value
 
 
-def validate_json(data: dict) -> dict:
+def validate_json(data: dict) -> Json:
     try:
-        validated = Json(**data)
-        return validated.model_dump()
+        return Json(**data)
     except ValidationError as e:
-        raise ValidationError(e.message_dict)
+        raise e
 

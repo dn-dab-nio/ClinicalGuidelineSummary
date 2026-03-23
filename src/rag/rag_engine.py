@@ -3,6 +3,7 @@ from src.rag.Generator import evaluate_answer, generate_followup_query
 from src.rag.query_compiler import build_data_query
 from src.rag.Generator import generate_guideline_answer
 
+
 def run_iterative_rag(vectorstore, classification_json: dict, max_iterations:int=3) -> dict:
 
     organisations = ["KOM", "NCCN", "ATA", "BTA", "ESMO"]

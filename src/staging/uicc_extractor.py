@@ -1,12 +1,12 @@
 from langchain_ollama import OllamaLLM
 
-llm = OllamaLLM(model="llama3.2:latest")
+llm = OllamaLLM(model="llama3.2")
 
 def tnm_extract(patient_description):
     prompt = f"""
 You are clinical staging assistant.
 Extract TNM classification information from the patient description according to tables in sources.
-    
+
 Rules:
 - If patient's type of cancer is described -> fill Cancer_type
 - If patient's age is described -> fill age

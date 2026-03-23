@@ -7,7 +7,7 @@ Provide evidence-based clinical management recommendations for the following pat
 - T classification: {data_json["T"]}
 - N classification: {data_json["N"]}
 - M classification: {data_json["M"]}
-- UICC Stage: {data_json["stage"]}
+- UICC Stage: {data_json["Stage"]}
 
 Use clinical guidelines from sources you have in vectorstore.
 Focus on treatment.
