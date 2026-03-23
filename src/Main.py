@@ -3,7 +3,7 @@ from src.rag.Embeddings import import_embedding_llm
 from src.rag.rag_engine import run_iterative_rag
 from src.staging.staging_pipeline import run_staging
 import time
-#import psutil
+import psutil
 import os
 
 
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     end = time.perf_counter()
     print(f"Total time: {end - start:.4f} sec")
 
-    #process = psutil.Process(os.getpid())
-   # print(f"Memory (MB): {process.memory_info().rss / 1024**2:.2f}")
-   # print(f"CPU %: {psutil.cpu_percent(interval=1)}")
+    process = psutil.Process(os.getpid())
+    print(f"Memory (MB): {process.memory_info().rss / 1024**2:.2f}")
+    print(f"CPU %: {psutil.cpu_percent(interval=1)}")
 

@@ -1,86 +1,16 @@
-# import pytesseract
-# from PyPDF2 import PdfReader
-# from pdf2image import convert_from_path
-#
-# #to jest funkcja ta sama co w pdf_loader, ale zniekształciłam ją tylko żeby mi to wykonał dla
-# #strony ze schematem w postaci zdjęcia, który jest obrócony o 90 stopni - strona 7
-#
-# #też sprawdzałam, czy czyta polskie znaki
-# def extract_text_from_pdf2(path):
-#     reader = PdfReader(path)
-#     texts = []
-#     images = convert_from_path(
-#         path,
-#         poppler_path=r"C:\Users\Natalia\Documents\Poppler\Release-25.12.0-0\poppler-25.12.0\Library\bin"
-#     )
-#
-#     for i, page in enumerate(reader.pages):
-#         if i == 6:
-#             text = page.extract_text()
-#             if text and len(text.strip()) > 50: #ignoruje strony prawie puste, z samym naglowkiem albo wlasnie schemat
-#                 texts.append(text)
-#             else:
-#                 print(f"OCR page {i}")
-#                 image = images[i]
-#                 text = pytesseract.image_to_string(image, lang="osd+eng+pol")
-#                 texts.append(text)
-#
-#     return "\n".join(texts)
-#
-#
-# pdf_path1 = r"C:\Users\Natalia\Desktop\wolontariat\WYTYCZNE\KOM Wytyczne 2022.pdf" #strona 70
-# pdf_path2 = r"C:\Users\Natalia\Desktop\ESMO Wytyczne 2019.pdf" #strona 7
-#
-# text = extract_text_from_pdf2(pdf_path2)
-#
-# print("----- OCR OUTPUT -----")
-# print(text[:1000])
-
-from src.staging.uicc_mapper import map_uicc
-from src.staging.uicc_extractor import tnm_extract
-from src.rag.Vector_store import load_vector_store
-from src.rag.Embeddings import import_embedding_llm
-from src.staging.uicc_validator import validate_json
-
-#embeddings = import_embedding_llm()
-#vectorstore = load_vector_store(r"C:\Users\Natalia\Desktop\Projekty_python\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
-
-query = f"""
-Pacjentka w wieku 56 lat, bez znanej historii nowotworów tarczycy w rodzinie, 
-nie zgłasza narażenia na promieniowanie. W USG pojedyncza hypoechogeniczna zmiana o mieszanym 
-echu w przedniej części lewego płata tarczycy, wielkości 1.8 x 1 x 2.1 cm, nie wykryto zmian 
-w obrębie węzłów chłonnych. Wykonano biopsję cienkoigłową zmiany, zgodnie z The Bethesda 
-System for Reporting Thyroid Cytopathology przypisano kategorię V (podejrzenie 
-raka pęcherzykowego)
-"""
-
-#answer = tnm_extract(query)
-#answer = map_uicc(query)
-#print(answer)
-
-parsed_answer = {'age': 56, 'T': 'T1', 'N': 'N10', 'M': 'M0', 'cancer_type': {'label': 'Podejrzana raka pęcherzykowa', 'group': 'Differentiated thyroid carcinoma'}}
-is_valid, message = validate_json(parsed_answer)
-if not is_valid:
-    print({"error": message})
-
-######
 from src.rag.retriever import retrieve_context
 from src.rag.Generator import evaluate_answer, generate_followup_query
 from src.rag.query_compiler import build_data_query
 from src.rag.Generator import generate_guideline_answer
+from src.rag.Vector_store import load_vector_store
+from src.rag.Embeddings import import_embedding_llm
+from src.staging.staging_pipeline import run_staging
 import time
 import psutil
 import os
 
 
-def run_iterative_rag(
-    vectorstore,
-    classification_json: dict,
-    max_iterations: int = 3,
-    k: int = 5,
-    debug: bool = True
-) -> dict:
-
+def run_iterative_rag2(vectorstore, classification_json: dict, max_iterations: int = 3, k: int = 5, debug: bool = True) -> dict:
     organisations = ["KOM", "NCCN", "ATA", "BTA", "ESMO"]
 
     base_query = build_data_query(classification_json)
@@ -106,12 +36,8 @@ def run_iterative_rag(
 
             # --- RETRIEVAL ---
             try:
-                context = retrieve_context(
-                    vectorstore,
-                    query,
-                    k=k,
-                    organisation=org
-                )
+                context = retrieve_context(vectorstore, query, k=k, organisation=org)
+
             except Exception as e:
                 print(f"[ERROR][{org}] Retrieval failed: {e}")
                 break
@@ -128,22 +54,14 @@ def run_iterative_rag(
 
             # --- GENERATION ---
             try:
-                answer = generate_guideline_answer(
-                    context_together,
-                    classification_json,
-                    org
-                )
+                answer = generate_guideline_answer(context_together, classification_json, org)
             except Exception as e:
                 print(f"[ERROR][{org}] Generation failed: {e}")
                 break
 
             # --- EVALUATION ---
             try:
-                evaluation = evaluate_answer(
-                    answer,
-                    query,  # ✅ FIX (nie base_query)
-                    context_together
-                )
+                evaluation = evaluate_answer(answer, query, context_together)
             except Exception as e:
                 print(f"[ERROR][{org}] Evaluation failed: {e}")
                 break
@@ -164,11 +82,7 @@ def run_iterative_rag(
 
             # --- QUERY REFINEMENT ---
             try:
-                query = generate_followup_query(
-                    query,
-                    context_together,
-                    evaluation  # ✅ FIX: dodany feedback
-                )
+                query = generate_followup_query(query, context_together, evaluation)
             except Exception as e:
                 print(f"[ERROR][{org}] Query refinement failed: {e}")
                 break
@@ -204,3 +118,57 @@ def run_iterative_rag(
         "answers": results,
         "metrics": metrics
     }
+
+
+start = time.perf_counter()
+embeddings = import_embedding_llm()
+vectorstore = load_vector_store(
+    r"C:\Users\Natalia\Desktop\Projekty_python\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
+
+query = f"""
+    Pacjentka 57 lata, brak narażenia na promieniowanie, brak rodzinnej historii raka tarczycy.
+    USG: hypoechogeniczna zmiana wielkości 2 cm, o nieregularnych marginesach, podejrzenie
+    mikrozwapnień, nie wykryto zmian w obrębie węzłów chłonnych. Wykonano biopsję cienkoigłową zmiany,
+    zgodnie z The Bethesda System for Reporting Thyroid Cytopathology przypisano kategorię III (AUS).
+
+    Wypisz mi wytyczne kliniczne dla pacjentki.
+    """
+
+classification_uicc = run_staging(query)
+print("--- CLASSIFICATION UICC/UJCC, 8th edition ---")
+print(classification_uicc)
+
+quidelines = run_iterative_rag2(vectorstore, classification_uicc)
+
+print("--- THERAPY FOR PATIENT---")
+for klucz, wartosc in quidelines.items():
+    print(f"{klucz}: \n {wartosc} \n\n")
+
+end = time.perf_counter()
+print(f"Total time: {end - start:.4f} sec")
+
+process = psutil.Process(os.getpid())
+print(f"Memory (MB): {process.memory_info().rss / 1024 ** 2:.2f}")
+print(f"CPU %: {psutil.cpu_percent(interval=1)}")
+
+# Traceback (most recent call last):
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\langchain_community\vectorstores\faiss.py", line 56, in dependable_faiss_import
+#     import faiss
+# ModuleNotFoundError: No module named 'faiss'
+#
+# During handling of the above exception, another exception occurred:
+#
+# Traceback (most recent call last):
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\tests\_init_.py", line 125, in <module>
+#     vectorstore = load_vector_store(
+#                   ^^^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\src\rag\Vector_store.py", line 10, in load_vector_store
+#     return FAISS.load_local(path, embeddings, allow_dangerous_deserialization=True)
+#            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\langchain_community\vectorstores\faiss.py", line 1204, in load_local
+#     faiss = dependable_faiss_import()
+#             ^^^^^^^^^^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\langchain_community\vectorstores\faiss.py", line 58, in dependable_faiss_import
+#     raise ImportError(
+# ImportError: Could not import faiss python package. Please install it with `pip install faiss-gpu` (for CUDA supported GPU) or `pip install faiss-cpu` (depending on Python version).
+#

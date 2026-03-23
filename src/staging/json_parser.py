@@ -8,3 +8,4 @@ def parse_str_to_json(answer: str) -> dict:
         return json.loads(raw_text)
     except json.decoder.JSONDecodeError:
         raise ValueError("Error: Can not parse json !")
+
