@@ -123,7 +123,7 @@ def run_iterative_rag2(vectorstore, classification_json: dict, max_iterations: i
 start = time.perf_counter()
 embeddings = import_embedding_llm()
 vectorstore = load_vector_store(
-    r"C:\Users\Natalia\Desktop\Projekty_python\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
+    r"C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
 
 query = f"""
     Pacjentka 57 lata, brak narażenia na promieniowanie, brak rodzinnej historii raka tarczycy.
