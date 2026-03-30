@@ -10,11 +10,11 @@ import os
 if __name__ == '__main__':
     start = time.perf_counter()
     embeddings = import_embedding_llm()
-    vectorstore = load_vector_store(r"C:\Users\Natalia\Desktop\Projekty_python\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
+    vectorstore = load_vector_store(r"C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
 
     query = f"""
-    Pacjentka 57 lata, brak narażenia na promieniowanie, brak rodzinnej historii raka tarczycy.
-    USG: hypoechogeniczna zmiana wielkości 2 cm, o nieregularnych marginesach, podejrzenie
+    Pacjentka 44 lata, brak narażenia na promieniowanie, brak rodzinnej historii raka tarczycy.
+    USG: hypoechogeniczna zmiana wielkości 8 mm, o nieregularnych marginesach, podejrzenie
     mikrozwapnień, nie wykryto zmian w obrębie węzłów chłonnych. Wykonano biopsję cienkoigłową zmiany,
     zgodnie z The Bethesda System for Reporting Thyroid Cytopathology przypisano kategorię III (AUS).
     
@@ -25,11 +25,21 @@ if __name__ == '__main__':
     print("--- CLASSIFICATION UICC/UJCC, 8th edition ---")
     print(classification_uicc)
 
-    quidelines = run_iterative_rag(vectorstore, classification_uicc)
+    quidelines = run_iterative_rag(vectorstore, classification_uicc, debug=False)
 
-    print("--- THERAPY FOR PATIENT---")
-    for klucz, wartosc in quidelines.items():
-        print(f"{klucz}: \n {wartosc} \n\n")
+    print("\n--- THERAPY FOR PATIENT--- \n")
+
+    for org in quidelines["answers"]:
+        result = quidelines["answers"][org]
+        metrics = quidelines["metrics"][org]
+
+        print(f"\n \n--- {org} ---")
+        print(f"{result} \n \n")
+
+        print("--- Metrics --- \n")
+        for m in metrics:
+            print(f"{m}: {metrics[m]}")
+
 
     end = time.perf_counter()
     print(f"Total time: {end - start:.4f} sec")

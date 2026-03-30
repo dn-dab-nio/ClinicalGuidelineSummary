@@ -27,21 +27,30 @@ Answer MUST contain these 3 requirements.
     return response
 
 
-def evaluate_answer(answer, base_query, context):
+def evaluate_answer(answer, base_query, query, context):
     prompt = f"""
 Evaluate the following answer.
 
-If it fully answers the question and is based only on the provided context, respond with: COMPLETE.
+If it fully answers questions and is based only on the provided context, respond with: COMPLETE.
 If important medical information is missing, respond with: INCOMPLETE.
 
-Question: 
+Main question: 
 {base_query}
+
+Question generated to fill missing medical information.
+{query} 
+
+Other Questions:
+-Does gap "to consider" contain informations about therapy that doctor should consider?
+-Does gap "What not recommended" contain informations about therapy that doctor should NOT (!) consider?
 
 Context: 
 {context}
 
 Answer:
 {answer}
+
+RESPOND ONLY 'COMPLETE' OR 'INCOMPLETE'.
 """
     return llm.invoke(prompt)
 
@@ -60,5 +69,5 @@ Only output the query.
 """
     return llm.invoke(prompt)
 
-llm = OllamaLLM(model="medllama2")
+llm = OllamaLLM(model="ahmgam/medllama3-v20:latest")
 

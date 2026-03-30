@@ -1,6 +1,6 @@
 from langchain_ollama import OllamaLLM
 
-llm = OllamaLLM(model="llama3.2")
+llm = OllamaLLM(model="ahmgam/medllama3-v20:latest")
 
 def tnm_extract(patient_description):
     prompt = f"""

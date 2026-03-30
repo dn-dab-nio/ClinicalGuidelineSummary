@@ -89,6 +89,5 @@ def map_uicc(patient_description: Json) -> dict:
 
     patient_description = patient_description.model_dump()
     patient_description["Stage"] = stage
-    print(f"Po zmapowaniu jsona i dodaniu stage w mapper, zostaje on przekonwertowany na dict. Czy model_dump usunal mi dane z Cancer_type?: \n {patient_description} \n Jeśli tak, trzeba to naprawić :)")
     return patient_description
 
