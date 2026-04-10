@@ -1,0 +1,15 @@
+Linki do instalacji zewnętrznych narzędzi:
+
+1. Tesseract
+https://github.com/UB-Mannheim/tesseract/wiki#tesseract-installer-for-windows
+
+Instalacja .exe, zaznaczenie języków English, polish.
+
+2. Poppler
+https://github.com/oschwartz10612/poppler-windows/releases
+
+Pobranie Release-xx.zip, po rozpakowaniu w ścieżce ma być \Library\bin
+
+3. Ollama, modele (w kodzie):
+ahmgam/medllama3-v20:latest
+nomic-embed-text

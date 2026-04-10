@@ -1,0 +1,28 @@
+# === CORE LLM / RAG ===
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-ollama==0.2.0
+
+# === EMBEDDINGS / VECTOR STORE ===
+faiss-cpu==1.8.0
+
+# === DATA PROCESSING ===
+pandas==2.2.2
+
+# === PDF + OCR ===
+pytesseract==0.3.10
+pdf2image==1.17.0
+PyPDF2==3.0.1
+Pillow==10.4.0
+
+# === TEXT SPLITTING ===
+langchain-text-splitters==0.3.2
+
+# === VALIDATION ===
+pydantic==2.7.4
+
+# === FRONTEND ===
+streamlit==1.37.1
+
+# === UTILITIES ===
+tqdm==4.66.4
