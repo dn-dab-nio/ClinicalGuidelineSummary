@@ -1,3 +1,8 @@
+Stabilne wersje plików w systemie: BEZ JSONA JESZCZE
+
+################################################
+1. app.py
+
 import streamlit as st
 import pandas as pd
 from src.staging.staging_pipeline import run_staging
@@ -44,12 +49,10 @@ if st.button("Generate summary"):
 
     rows = []
 
-    for org, data in answers.items():
+    for org, answer in answers.items():
         rows.append({
             "Organization": org,
-            "Recommended": "✔" if data.recommended else "—",
-            "To Consider": "✔" if data.to_consider else "—",
-            "Not Recommended": "✔" if data.not_recommended else "—",
+            "Guidelines": answer,
             "Iterations": metrics.get(org, {}).get("iterations_used", "N/A"),
             "Status": metrics.get(org, {}).get("final_status", "N/A")
         })
@@ -57,45 +60,18 @@ if st.button("Generate summary"):
     df_guidelines = pd.DataFrame(rows)
     st.table(df_guidelines)
 
-
-    def format_text(text: str):
-        if not text:
-            return ["No information available"]
-
-        # rozbij po kropkach (prosty NLP hack)
-        sentences = [s.strip() for s in text.split(".") if s.strip()]
-
-        return sentences
-
-
-    st.subheader("Detailed Guidelines")
+    st.subheader("Detailed View")
 
     cols = st.columns(len(answers))
 
-    for col, (org, data) in zip(cols, answers.items()):
+    for col, (org, answer) in zip(cols, answers.items()):
         with col:
-            st.markdown(f"## {org}")
+            st.markdown(f"### {org}")
 
-            st.markdown("### 🟢 Recommended")
-            rec_list = format_text(data.recommended)
+            st.markdown("📋 **Guidelines**")
+            st.write(answer)
 
-            for r in rec_list[:5]:
-                st.markdown(f"- {r}")
-
-            st.markdown("### 🟡 To Consider")
-            consider_list = format_text(data.to_consider)
-
-            for c in consider_list[:5]:
-                st.markdown(f"- {c}")
-
-            st.markdown("### 🔴 Not Recommended")
-            not_rec_list = format_text(data.not_recommended)
-
-            for n in not_rec_list[:5]:
-                st.markdown(f"- {n}")
-
-            st.markdown("---")
-            st.markdown("**Metrics**")
+            st.markdown("📊 **Metrics**")
             st.write(f"Iterations: {metrics.get(org, {}).get('iterations_used', 'N/A')}")
             st.write(f"Status: {metrics.get(org, {}).get('final_status', 'N/A')}")
             st.write(f"Contexts used: {metrics.get(org, {}).get('contexts_used', 'N/A')}")
@@ -103,3 +79,7 @@ if st.button("Generate summary"):
     with st.expander("Debug metrics"):
         st.json(metrics)
 
+
+##########################################################################################################
+
+2.

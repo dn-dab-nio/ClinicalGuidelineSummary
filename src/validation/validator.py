@@ -1,4 +1,4 @@
-from pydantic import ValidationError, BaseModel, field_validator
+from pydantic import ValidationError, BaseModel, field_validator, Field
 from typing import Optional, Literal
 
 
@@ -31,9 +31,26 @@ class Json(BaseModel):
         return value
 
 
+class GuidelineAnswer(BaseModel):
+    recommended: str = Field(..., alias="Recommended")
+    to_consider: str = Field(..., alias="To consider")
+    not_recommended: str = Field(..., alias="Not recommended")
+
+    @field_validator("*")
+    def not_empty(cls, value):
+        if not value or not value.strip():
+            raise ValueError("Field cannot be empty")
+        return value
+
+
 def validate_json(data: dict) -> Json:
     try:
         return Json(**data)
     except ValidationError as e:
         raise e
 
+def validate_guideline_answer(data: dict) -> GuidelineAnswer:
+    try:
+        return GuidelineAnswer(**data)
+    except ValidationError as e:
+        raise e

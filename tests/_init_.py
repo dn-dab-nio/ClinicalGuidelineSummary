@@ -32,16 +32,43 @@
 # print(f"CPU (%): {psutil.cpu_percent(interval=1)}")
 
 
-ziomek = {"wyniki": {"kot": 'kot', "pies": 'pis'}, "mmm": {"kot": {"dlugosc": 2, "siersc": 5}, "pies": {"dlugosc": 3, "siersc": 6}}}
+# ziomek = {"wyniki": {"kot": 'kot', "pies": 'pis'}, "mmm": {"kot": {"dlugosc": 2, "siersc": 5}, "pies": {"dlugosc": 3, "siersc": 6}}}
+#
+# lol = ziomek["wyniki"]["pies"]
+#
+# for org in ziomek["wyniki"]:
+#     result = ziomek["wyniki"][org]
+#     metrics = ziomek["mmm"][org]
+#
+#     print(f"--- {org} ---")
+#     print(f"{result}")
+#     for m in metrics:
+#         print(f"{m}: {metrics[m]}")
 
-lol = ziomek["wyniki"]["pies"]
+# from langchain_ollama import OllamaEmbeddings
+#
+# def import_embedding_llm():
+#     return OllamaEmbeddings(model="nomic-embed-text")
+#
+# import_embedding_llm()
+from src.rag.Vector_store import load_vector_store
+from src.rag.Embeddings import import_embedding_llm
 
-for org in ziomek["wyniki"]:
-    result = ziomek["wyniki"][org]
-    metrics = ziomek["mmm"][org]
+embeddings = import_embedding_llm()
 
-    print(f"--- {org} ---")
-    print(f"{result}")
-    for m in metrics:
-        print(f"{m}: {metrics[m]}")
+vectorstore = load_vector_store(r"C:\Users\kuba_dr\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
+print(vectorstore.index.ntotal)
+print(len(vectorstore.docstore._dict))
+
+results = vectorstore.similarity_search("test", k=3)
+if vectorstore.index.ntotal == 0:
+    print("Vectorstore jest pusty ❌")
+else:
+    print("Vectorstore zawiera dane ✅ \n \n")
+
+for doc in vectorstore.docstore._dict.values():
+    print(doc.metadata)
+
+for r in results:
+    print(r.page_content[:200])
 

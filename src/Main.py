@@ -10,7 +10,7 @@ import os
 if __name__ == '__main__':
     start = time.perf_counter()
     embeddings = import_embedding_llm()
-    vectorstore = load_vector_store(r"C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
+    vectorstore = load_vector_store(r"C:\Users\kuba_dr\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
 
     query = f"""
     Pacjentka 44 lata, brak narażenia na promieniowanie, brak rodzinnej historii raka tarczycy.
@@ -34,13 +34,21 @@ if __name__ == '__main__':
         metrics = quidelines["metrics"][org]
 
         print(f"\n \n--- {org} ---")
-        print(f"{result} \n \n")
 
-        print("--- Metrics --- \n")
+        print("\n Recommended: \n")
+        print(result.recommended)
+
+        print("\n To consider: \n")
+        print(result.to_consider)
+
+        print("\n Not recommended: \n")
+        print(result.not_recommended)
+
+        print("\n* Metrics \n")
         for m in metrics:
             print(f"{m}: {metrics[m]}")
 
-
+    print(f"\n \n---TOTAL SYSTEM METRICS---")
     end = time.perf_counter()
     print(f"Total time: {end - start:.4f} sec")
 

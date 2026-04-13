@@ -1,10 +1,20 @@
 from langchain_ollama import OllamaLLM
+from src.validation.json_parser import parse_str_to_json
+from src.validation.validator import validate_guideline_answer, GuidelineAnswer
 
-def generate_guideline_answer(context, classification_json, organisation):
+
+def get_llm():
+    return OllamaLLM(
+        model="gpt-oss",
+        base_url="http://127.0.0.1:11434",
+        temperature=0.0
+    )
+
+def generate_guideline_answer(context: str, classification_json: dict, organisation: str) -> GuidelineAnswer:
+    llm = get_llm()
     prompt = f"""
 You are clinical guideline assistant.
 Use ONLY the following context from {organisation} guidelines.
-If information is missing, say: "INSUFFICIENT INFORMATION".
 
 Context: {context}
 
@@ -14,20 +24,36 @@ Patient classification:
 Provide concise recommendations according to {organisation} guidelines.
 Do not include recommendations from other organisations.
 
-Answer must be focused on:
+Answer MUST be focused on these 3 requirements:
 * What recommended - best recommendations
 * To consider - recommendations that doctor should consider
 * What not recommended - bad options for patient's therapy
 
-Answer MUST contain these 3 requirements.
+Rules:
+- Output ONLY valid JSON!
+- Every requirement MUST be in special JSON key!
+- EVERY KEY IN JSON MUST BE FILLED!
+- If there is not information in key - you MUST fill with "INSUFFICIENT INFORMATION"!
+
+
+Give answer in JSON format: - EVERY KEY IN JSON MUST BE FILLED!
+{{
+    "Recommended": "",
+    "To consider": "",
+    "Not recommended": ""
+}}
+EVERY KEY IN JSON MUST BE FILLED!
 """
-
-
     response = llm.invoke(prompt)
-    return response
+    print(f"\nODPOWIEDŹ LLMA: \n{response}")
+    json = parse_str_to_json(response)
+    print(f"\nPO PARSOWANIU: \n{json}")
+    validated_json = validate_guideline_answer(json)
+    return validated_json
 
 
-def evaluate_answer(answer, base_query, query, context):
+def evaluate_answer(answer: str, base_query: str, query: str, context: str) -> str:
+    llm = get_llm()
     prompt = f"""
 Evaluate the following answer.
 
@@ -50,12 +76,17 @@ Context:
 Answer:
 {answer}
 
-RESPOND ONLY 'COMPLETE' OR 'INCOMPLETE'.
+You MUST respond ONLY with a valid JSON object in the following format, without any extra text or markdown:
+{{
+  "status": "COMPLETE", "INCOMPLETE", or "UNAVAILABLE_IN_SOURCE",
+  "missing_medical_info": "Explain briefly what is missing (or null if complete)",
+  "suggested_search_term": "Provide a new, broader search query if incomplete (or null)"
+}}
 """
     return llm.invoke(prompt)
 
-
-def generate_followup_query(og_query, previous_answer):
+def generate_followup_query(og_query: str, previous_answer: str) -> str:
+    llm = get_llm()
     prompt = f"""
 The original question was:
 {og_query}
@@ -68,6 +99,3 @@ that would retrieve the missing medical information.
 Only output the query.
 """
     return llm.invoke(prompt)
-
-llm = OllamaLLM(model="ahmgam/medllama3-v20:latest")
-

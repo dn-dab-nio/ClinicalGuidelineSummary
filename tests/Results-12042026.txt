@@ -1,0 +1,142 @@
+--- CLASSIFICATION UICC/UJCC, 8th edition ---
+{'age': 44, 'T': 'T1', 'N': 'N0', 'M': 'M0', 'cancer_type': {'label': 'Follicular thyroid carcinoma', 'group': 'Differentiated thyroid carcinoma'}, 'Stage': 'Stage I'}
+
+--- THERAPY FOR PATIENT--- 
+
+
+ 
+--- KOM ---
+**Patient profile**  
+- 44 y/o, T1 N0 M0, Follicular thyroid carcinoma (Stage I, low‑risk per ATA 2015)
+
+---
+
+### What is recommended (best practice)
+
+| Recommendation | Rationale (KOM guideline) |
+|----------------|---------------------------|
+| **Total thyroidectomy** (or appropriate curative surgery) | Follicular carcinoma requires surgical removal of the gland; no evidence supports lobectomy alone for low‑risk disease. |
+| **Post‑operative monitoring by a local endocrinology or oncology centre** | Guideline 4: “Postoperative monitoring of patients with low‑risk thyroid cancer is performed by local endocrinology or oncology centres.” |
+| **Apply ATA 2015 risk stratification + dynamic risk stratification** | Guideline 5: “Qualification of the patients to a low‑risk group is based on TNM, the 2015 ATA risk stratification system, and dynamic risk stratification.” |
+| **Provide comprehensive information and obtain informed consent for any therapy** | Guideline 1: “The patient should receive comprehensive information… The patient’s consent to this treatment is necessary.” |
+
+---
+
+### To consider
+
+| Consideration | When to apply |
+|---------------|---------------|
+| **Radioiodine (RAI) therapy** | If post‑operative risk assessment shows high‑risk features or residual disease; otherwise, RAI is not indicated for low‑risk follicular carcinoma. |
+| **Patient education on radiological protection and possible consequences of RAI** | If RAI is contemplated, as per guideline 1. |
+| **Dynamic risk reassessment during follow‑up** | To detect any change in risk status that might alter management. |
+
+---
+
+### What is not recommended
+
+| Not recommended | Reason |
+|-----------------|--------|
+| **RAI therapy for low‑risk follicular carcinoma** | Guideline 1 & 2A: RAI is reserved for cases where residual disease or higher risk is present; low‑risk patients do not benefit. |
+| **Active surveillance for follicular carcinoma** | Active surveillance is recommended only for papillary microcarcinoma (guideline 70‑71); not applicable to follicular histology. |
+| **Surgery on all Bethesda IV nodules** | Guideline 2.2.2: “The principle of operating on all nodules/focal lesions with a cytologic diagnosis ‘suspicious for a follicular neoplasm’ cannot be literally implemented in Poland.” |
+| **Unnecessary lobectomy when total thyroidectomy is indicated** | Total thyroidectomy is the standard curative approach for follicular carcinoma; lobectomy alone is insufficient. |
+
+---
+
+**Summary**  
+For this low‑risk follicular thyroid carcinoma, perform curative total thyroidectomy, monitor the patient in a local endocrine/oncology centre, and use ATA 2015 plus dynamic risk stratification to confirm low‑risk status. RAI therapy and active surveillance are not indicated unless future risk reassessment shows higher risk. All treatments should be preceded by thorough patient education and informed consent. 
+ 
+
+--- Metrics --- 
+
+iterations_used: 3
+final_status: INCOMPLETE
+time_sec: 346.41
+contexts_used: 3
+
+ 
+--- NCCN ---
+**NCCN 2025 Guidelines – Differentiated Thyroid Carcinoma (Follicular, Stage I)**  
+
+| Category | Recommendation |
+|----------|----------------|
+| **What is recommended** | • **Hemithyroidectomy (lobectomy)** for a T1N0M0 follicular tumor ≤ 4 cm with no extrathyroidal extension or nodal disease.  <br>• **No radioactive iodine (RAI) ablation** is required for low‑risk, Stage I disease.  <br>• **TSH‑suppression therapy** (target TSH < 0.1 mIU/L) after surgery.  <br>• **Surveillance**: serum thyroglobulin (Tg) and neck ultrasound every 6–12 months for the first 5 years, then annually. |
+| **To consider** | • **Total thyroidectomy** if the patient prefers, if the tumor is multifocal, or if there are other high‑risk features (e.g., aggressive histology).  <br>• **RAI ablation** if the surgeon or patient deems it appropriate for risk reduction (e.g., larger tumor, capsular invasion, or patient preference).  <br>• **Prophylactic central neck dissection** only if clinically indicated (e.g., suspicious nodes on imaging).  <br>• **External‑beam radiation** or chemotherapy only for unresectable or metastatic disease (not applicable to Stage I). |
+| **What is not recommended** | • Routine prophylactic central neck dissection in clinically node‑negative patients.  <br>• Routine RAI ablation for low‑risk, Stage I follicular carcinoma.  <br>• Total thyroidectomy for all small, low‑risk tumors.  <br>• External‑beam radiation or chemotherapy in the absence of high‑risk or metastatic disease. |
+
+*These recommendations are based on the NCCN 2025 guidelines for differentiated thyroid carcinoma and are applicable to a 44‑year‑old patient with T1N0M0 follicular thyroid carcinoma (Stage I).* 
+ 
+
+--- Metrics --- 
+
+iterations_used: 1
+final_status: COMPLETE
+time_sec: 68.797
+contexts_used: 1
+
+ 
+--- ATA ---
+**ATA 2025 Guideline‑Based Recommendations for a 44‑year‑old with T1N0M0 follicular thyroid carcinoma (Stage I)**  
+
+| Category | Recommendation |
+|----------|----------------|
+| **What recommended** | • **Surgical treatment** – Lobectomy (or total thyroidectomy if the surgeon prefers or if multifocal disease is suspected). <br>• **Radioactive iodine (RAI) therapy** – Not indicated for low‑risk disease (T1N0M0). <br>• **TSH suppression** – Moderate suppression (TSH 0.5–2.0 mIU/L) during follow‑up. <br>• **Surveillance** – Periodic neck ultrasound and serum thyroglobulin (Tg) monitoring per ATA surveillance schedule. |
+| **To consider** | • **Total thyroidectomy** if the patient has multifocal disease, vascular invasion, or prefers a single definitive surgery. <br>• **Low‑dose RAI** only if unexpected high‑risk features (e.g., vascular invasion, capsular invasion) are identified post‑operatively. <br>• **High‑dose RAI** only if the disease progresses or recurs. <br>• **Intensive surveillance** (more frequent ultrasounds/Tg) if the patient has anxiety or prefers closer monitoring. |
+| **What not recommended** | • **Observation without surgery** – Surgery is the standard of care for DTC. <br>• **High‑dose RAI** for this low‑risk patient. <br>• **Aggressive TSH suppression** (TSH < 0.1 mIU/L) – may increase morbidity without benefit in low‑risk disease. <br>• **Unnecessary completion thyroidectomy** after lobectomy unless high‑risk features are found. |
+
+*These recommendations are based solely on the 2025 ATA Management Guidelines for Adult Patients with Differentiated Thyroid Cancer.* 
+ 
+
+--- Metrics --- 
+
+iterations_used: 2
+final_status: COMPLETE
+time_sec: 183.609
+contexts_used: 2
+
+ 
+--- BTA ---
+**What recommended**  
+- Surgery for differentiated thyroid cancer (the patient has follicular thyroid carcinoma, Stage I).  
+
+**To consider**  
+- Radioiodine remnant ablation and therapy for differentiated thyroid cancer (as part of the post‑operative management pathway).  
+
+**What not recommended**  
+- No specific alternative therapies are listed in the BTA 2014 guidelines for this patient’s stage and tumour type. 
+ 
+
+--- Metrics --- 
+
+iterations_used: 3
+final_status: INCOMPLETE
+time_sec: 197.127
+contexts_used: 3
+
+ 
+--- ESMO ---
+**ESMO 2019 Guidelines – Follicular Thyroid Carcinoma, Stage I (T1 N0 M0)**  
+
+| **What recommended** | **To consider** | **What not recommended** |
+|-----------------------|-----------------|--------------------------|
+| • **Surgical approach** – Lobectomy is the preferred treatment for a T1N0M0 follicular carcinoma (tumor ≤ 4 cm, no extrathyroidal extension, no lymph‑node metastasis). | • **Radioactive iodine (RAI) ablation** – May be considered if the tumor is > 1 cm or if any high‑risk features are present (e.g., aggressive histology, vascular invasion). | • **Prophylactic central‑neck dissection** – Not indicated in low‑risk, node‑negative disease. |
+| • **Post‑operative TSH suppression** – Aim for a TSH level < 0.1 mIU/L to reduce recurrence risk. | • **Total thyroidectomy** – Reserve for tumors > 4 cm or when lobectomy is not feasible. | • **Routine RAI ablation in all low‑risk patients** – Unnecessary and not supported by evidence. |
+| • **Follow‑up** – Neck ultrasound and serum thyroglobulin (or Tg‑antibody) monitoring every 6–12 months for the first 5 years, then annually. | • **TSH‑suppression intensity** – Adjust based on patient age, comorbidities, and risk profile. | • **High‑dose RAI in the absence of risk factors** – Not recommended. |
+| • **Patient education** – Discuss the low recurrence risk, importance of adherence to follow‑up, and lifestyle measures (iodine intake, smoking cessation). | • **Consideration of patient preference** – In shared decision‑making, some patients may opt for total thyroidectomy for peace of mind. | • **No routine imaging beyond ultrasound** – CT/MRI or PET/CT not indicated in low‑risk disease. |
+
+**Summary**  
+For a 44‑year‑old with T1 N0 M0 follicular thyroid carcinoma, the ESMO 2019 guidelines recommend a lobectomy with postoperative TSH suppression and routine ultrasound/Tg surveillance. Radioactive iodine ablation is not routinely advised unless higher‑risk features are present. Prophylactic neck dissection and routine high‑dose RAI are not recommended. 
+ 
+
+--- Metrics --- 
+
+iterations_used: 1
+final_status: COMPLETE
+time_sec: 71.674
+contexts_used: 1
+
+ 
+---TOTAL SYSTEM METRICS---
+Total time: 870.6148 sec
+Memory (MB): 186.55
+CPU %: 4.7

@@ -1,6 +1,6 @@
 from langchain_ollama import OllamaLLM
 
-llm = OllamaLLM(model="ahmgam/medllama3-v20:latest")
+llm = OllamaLLM(model="gpt-oss", base_url="http://127.0.0.1:11434")
 
 def tnm_extract(patient_description):
     prompt = f"""
@@ -14,6 +14,7 @@ Rules:
 - Do not round up limits in tumor size - STAY IN LIMITS
 - If lymph nodes are described -> fill N with only N feature
 - If distant metastases are described -> fill M with only M feature
+- If name of cancer is NOT described in patient description -> DO NOT guess, fill 'label' with "INSUFFICIENT_INFORMATION"
 - If information in patient description is missing -> write: INSUFFICIENT_INFORMATION
 - DO NOT infer
 - DO NOT quess

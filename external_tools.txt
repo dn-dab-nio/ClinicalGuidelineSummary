@@ -2,8 +2,11 @@ Linki do instalacji zewnętrznych narzędzi:
 
 1. Tesseract
 https://github.com/UB-Mannheim/tesseract/wiki#tesseract-installer-for-windows
+https://github.com/tesseract-ocr/tessdata  #pol
 
-Instalacja .exe, zaznaczenie języków English, polish.
+Instalacja .exe, zaznaczenie języków english, polish.
+Dodanie ścieżki Tesseract-OCR do zmiennych systemowych Path w zmiennych środowiskowych
+Język polski - pol.traineddata do folderu ~\Tesseract-OCR\tessdata
 
 2. Poppler
 https://github.com/oschwartz10612/poppler-windows/releases
@@ -13,3 +16,5 @@ Pobranie Release-xx.zip, po rozpakowaniu w ścieżce ma być \Library\bin
 3. Ollama, modele (w kodzie):
 ahmgam/medllama3-v20:latest
 nomic-embed-text
+
+Jeśli doda się te narzędzia do PATH (zmienne systemowe), w pdf_loader.py będzie można usunąć ścieżki do nich.
