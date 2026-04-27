@@ -5,14 +5,14 @@ from pdf2image import convert_from_path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:\Users\natalia.nowak\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"
 
 def extract_text_from_pdf(path: str) -> str:
     reader = PdfReader(path)
     texts = []
     images = convert_from_path(
         path,
-        poppler_path=r"C:\Program Files\poppler-25.12.0\Library\bin"
+        poppler_path=r"C:\Users\natalia.nowak\AppData\Local\Programs\Release-25.12.0-0\poppler-25.12.0\Library\bin"
     )
 
     for i, page in enumerate(reader.pages):

@@ -1,0 +1,16 @@
+TODO:
+
+1. Naprawa ekstrakcji cech TNM, aby model zaglądał do vectorstore	  | ✓ DO TESTU
+
+2. Zmiana na zwracanie List[str] z str w JSONie z organizacjami, 	  | x
+dla kluczy Recommended, To consider, Not Recommended 
+
+3. Poprawa front-end							  | x
+
+4. Najpierw tnm_exract, potem to co wyrzuci można poprawić, zmieniając,	  | ??? DO TESTU
+a potem dopiero przycisk "Generate Guidelines"
+
+5. CYTOWANIE								  | x
+
+6. Wprowadzenie Bethesda System, czy odbyła się biopsja, USG.		  | x
+	(plus wprowadzenie pod to zmiany w front-end)

@@ -10,7 +10,7 @@ import os
 if __name__ == '__main__':
     start = time.perf_counter()
     embeddings = import_embedding_llm()
-    vectorstore = load_vector_store(r"C:\Users\kuba_dr\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
+    vectorstore = load_vector_store(embeddings)
 
     query = f"""
     Pacjentka 44 lata, brak narażenia na promieniowanie, brak rodzinnej historii raka tarczycy.
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     Wypisz mi wytyczne kliniczne dla pacjentki.
     """
 
-    classification_uicc = run_staging(query)
+    classification_uicc = run_staging(query, vectorstore)
     print("--- CLASSIFICATION UICC/UJCC, 8th edition ---")
     print(classification_uicc)
 

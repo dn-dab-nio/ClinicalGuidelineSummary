@@ -6,7 +6,6 @@ from src.validation.validator import validate_guideline_answer, GuidelineAnswer
 def get_llm():
     return OllamaLLM(
         model="gpt-oss",
-        base_url="http://127.0.0.1:11434",
         temperature=0.0
     )
 

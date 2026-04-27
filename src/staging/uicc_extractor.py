@@ -1,11 +1,18 @@
 from langchain_ollama import OllamaLLM
+from src.rag.retriever import retrieve_context
+llm = OllamaLLM(model="gpt-oss")
 
-llm = OllamaLLM(model="gpt-oss", base_url="http://127.0.0.1:11434")
-
-def tnm_extract(patient_description):
+def tnm_extract(patient_description: str, vectorstore):
+    context = retrieve_context(vectorstore, patient_description)
     prompt = f"""
-You are clinical staging assistant.
-Extract TNM classification information from the patient description according to tables in sources.
+You are clinical staging assistant. Using PROVIDED CONTEXT 
+extract TNM classification information FROM PATIENT DESCRIPTION according to tables in sources.
+
+Context: 
+{context}
+
+Patient description:
+{patient_description}
 
 Rules:
 - If patient's type of cancer is described -> fill Cancer_type
@@ -42,9 +49,6 @@ JSON format:
         "group": ""
     }}
 }}
-    
-Patient description:
-{patient_description}
 """
     response = llm.invoke(prompt)
     return response

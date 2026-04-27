@@ -4,9 +4,9 @@ from src.validation.validator import validate_json
 from src.staging.uicc_mapper import map_uicc
 
 
-def run_staging(query: str) -> dict | None:
+def run_staging(query: str, vectorstore) -> dict | None:
     try:
-        answer = tnm_extract(query)
+        answer = tnm_extract(query, vectorstore)
         print(answer)
         parsed_answer = parse_str_to_json(answer)
         parsed_answer = validate_json(parsed_answer)

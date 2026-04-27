@@ -6,6 +6,7 @@ def create_vector_store(docs, embeddings):
 def save_vector_store(vectorstore, path="vectorstore"):
     vectorstore.save_local(path)
 
-def load_vector_store(path, embeddings):
+def load_vector_store(embeddings):
+    path = r"C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\src\scripts\vector_db"
     return FAISS.load_local(path, embeddings, allow_dangerous_deserialization=True)
 

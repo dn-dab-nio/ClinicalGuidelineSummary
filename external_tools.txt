@@ -18,3 +18,11 @@ ahmgam/medllama3-v20:latest
 nomic-embed-text
 
 Jeśli doda się te narzędzia do PATH (zmienne systemowe), w pdf_loader.py będzie można usunąć ścieżki do nich.
+
+
+
+INSTRUKCJE:
+1. Komputer Kuby:
+
+Do wszystkich wywołań modeli (Embeddings, Generator, uicc_extractor) dodać base_url="http://127.0.0.1:11434", ze względu na
+brak Ollamy w zmiennych środowiskowych (PATH).
