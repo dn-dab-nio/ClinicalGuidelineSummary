@@ -13,6 +13,9 @@ class Json(BaseModel):
     N: Optional[Literal["Nx", "NX", "N0", "N0a", "N0b", "N1", "N1a", "N1b","INSUFFICIENT_INFORMATION"]]
     M: Optional[Literal["Mx", "MX", "M0", "M1", "INSUFFICIENT_INFORMATION"]]
     cancer_type: CancerType
+    Bethesda_System_Category: str
+    USG: str
+    Biopsy: str
 
     @field_validator('age')
     def validate_age(cls, value):

@@ -12,5 +12,5 @@ a potem dopiero przycisk "Generate Guidelines"
 
 5. CYTOWANIE								  | x
 
-6. Wprowadzenie Bethesda System, czy odbyła się biopsja, USG.		  | x
+6. Wprowadzenie Bethesda System, czy odbyła się biopsja, USG.		  | 0.5 x
 	(plus wprowadzenie pod to zmiany w front-end)
