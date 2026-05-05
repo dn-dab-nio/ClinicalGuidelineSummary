@@ -20,17 +20,15 @@ Patient description:
 {patient_description}
 
 Rules:
-- If patient's type of cancer is described -> fill Cancer_type
-- If patient's age is described -> fill age
+- If patient's age is described -> fill age, if is not described -> fill age with "INSUFFICIENT_INFORMATION"
 - If tumor size (local invasion) is described -> fill T with ONLY T feature - look at the greatest dimension in query
 - Do not round up limits in tumor size - STAY IN LIMITS
-- If lymph nodes (N) are described -> fill N with only N feature
-- If distant metastases (M) are described -> fill M with only M feature
-- If name of cancer is NOT described in patient description -> DO NOT guess, fill 'label' with "INSUFFICIENT_INFORMATION"
-- If ANY required information in patient description is MISSING -> write: INSUFFICIENT_INFORMATION (except group of cancer)
+- If lymph nodes (N) are described -> fill N with only N feature, If is not described -> fill with "INSUFFICIENT_INFORMATION"
+- If distant metastases (M) are described -> fill M with only M feature, If is not described -> fill with "INSUFFICIENT_INFORMATION"
+- If name of cancer is NOT described in patient description -> DO NOT guess, fill 'label' with "INSUFFICIENT_INFORMATION" and fill 'group' with "Differentiated thyroid carcinoma"
 - DO NOT infer
 - DO NOT quess
-- DO NOT leave empty keys
+- DO NOT leave empty keys (especially key 'group')!
 - DO NOT write tumor size instead of T feature
 - Output ONLY valid JSON
 

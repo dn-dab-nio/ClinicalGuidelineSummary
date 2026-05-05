@@ -14,3 +14,6 @@ a potem dopiero przycisk "Generate Guidelines"
 
 6. Wprowadzenie Bethesda System, czy odbyła się biopsja, USG.		  | 0.5 x
 	(plus wprowadzenie pod to zmiany w front-end)
+
+7. ASCO dodało nowe wytyczne. Narazie można jeszcze nie dodawać ale to
+np. wykorzystać w przyszłości, do testów (w projekcie nie używam ASCO).

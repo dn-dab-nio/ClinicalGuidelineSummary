@@ -74,6 +74,19 @@ def map_uicc_utc(data: Json) -> str:
 def map_uicc(patient_description: Json) -> dict:
     cancer_group = patient_description.cancer_type.group
 
+    #jednak może nie, bo w zasadzie jak on nie ma jednej z tych cech to nadal umie okreslić stage na podstawie pozostałych
+
+    # t = patient_description.T
+    # n = patient_description.N
+    # m = patient_description.M
+
+    # if t == "INSUFFICIENT_INFORMATION" or n == "INSUFFICIENT_INFORMATION" or m == "INSUFFICIENT_INFORMATION":
+    #     stage = "INSUFFICIENT_INFORMATION"
+    #     result = patient_description.model_dump()
+    #     result["Stage"] = stage
+    #     return result
+    #
+
     if cancer_group == "Differentiated thyroid carcinoma":
         stage = map_uicc_dtc(patient_description)
     elif cancer_group == "Medullary thyroid carcinoma":

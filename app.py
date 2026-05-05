@@ -36,7 +36,11 @@ if  st.button("Run Patient Classification"):
             "cancer_type": {
                 "label": "Papillary Thyroid Carcinoma",
                 "group": "Differentiated thyroid carcinoma"
-            }
+            },
+            "Stage": "Stage II",
+            "Bethesda_System_Category": "III (AUS)",
+            "USG": "Performed; hypoechogenic nodule 8 mm, irregular margins, suspected microcalcifications, no lymph node involvement",
+            "Biopsy": "Performed; fine‑needle aspiration"
         }
 
     st.session_state["classification"] = classification
@@ -48,6 +52,7 @@ if "classification" in st.session_state:
     T = st.selectbox("T", ["TX", "T1", "T1a", "T1b", "T2", "T3", "T3a", "T3b", "T4a", "T4b"], index=0 if not cls.get("T") else ["TX", "T1", "T1a", "T1b", "T2", "T3", "T3a", "T3b", "T4a", "T4b"].index(cls.get("T")))
     N = st.selectbox("N", ["NX", "N0", "N0a", "N0b", "N1", "N1a", "N1b"], index=0 if not cls.get("N") else ["NX", "N0", "N0a", "N0b", "N1", "N1a", "N1b"].index(cls.get("N")))
     M = st.selectbox("M", ["MX", "M0", "M1"], index=0 if not cls.get("M") else ["MX", "M0", "M1"].index(cls.get("M")))
+    Stage = st.text_input("UICC Stage", value=cls.get("Stage", ""))
 
     cancer = cls.get("cancer_type", {})
     label = cancer.get("label", "")
@@ -60,8 +65,20 @@ if "classification" in st.session_state:
         label_input = st.text_input("Label", value=label, help= "e.g. Papillary thyroid carcinoma")
 
     with col2:
-        group_input = st.text_input("Group", ["Differentiated thyroid carcinoma", "Medullary thyroid carcinoma", "Anaplastic thyroid carcinoma"],
+        group_input = st.selectbox("Group", ["Differentiated thyroid carcinoma", "Medullary thyroid carcinoma", "Anaplastic thyroid carcinoma"],
                                     index=0 if not group else ["Differentiated thyroid carcinoma", "Medullary thyroid carcinoma", "Anaplastic thyroid carcinoma"].index(group))
+
+    st.subheader("Diagnostics")
+    col3, col4, col5 = st.columns(3)
+
+    with col3:
+        bethesda = st.text_input("Bethesda System Category", value="", help= cls.get("Bethesda_System_Category", ""))
+
+    with col4:
+        usg = st.text_input("USG (ultrasound)", value="", help= cls.get("USG", ""))
+
+    with col5:
+        biopsy = st.text_input("Biopsy/FNA", value="", help= cls.get("Biopsy", ""))
 
     edited_classification = {
         "age": age,
@@ -71,7 +88,11 @@ if "classification" in st.session_state:
         "cancer_type": {
                 "label": label_input,
                 "group": group_input
-            }
+            },
+        "stage": Stage,
+        "Bethesda_System_Category": bethesda,
+        "USG": usg,
+        "Biopsy": biopsy,
     }
 
     st.session_state["edited_classification"] = edited_classification
