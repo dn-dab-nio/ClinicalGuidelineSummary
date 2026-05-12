@@ -36,11 +36,13 @@ Rules:
 
 
 Give answer in JSON format: - EVERY KEY IN JSON MUST BE FILLED!
+Each category must contain a list of bullet points.
 {{
-    "Recommended": "",
-    "To consider": "",
-    "Not recommended": ""
+    "Recommended": ["...", "..."],
+    "To consider": ["...", "..."],
+    "Not recommended": ["...", "..."]
 }}
+Each bullet point mst be one complete recommendation.
 EVERY KEY IN JSON MUST BE FILLED!
 """
     response = llm.invoke(prompt)
@@ -51,7 +53,7 @@ EVERY KEY IN JSON MUST BE FILLED!
     return validated_json
 
 
-def evaluate_answer(answer: str, base_query: str, query: str, context: str) -> str:
+def evaluate_answer(answer: GuidelineAnswer, base_query: str, query: str, context: str) -> str:
     llm = get_llm()
     prompt = f"""
 Evaluate the following answer.
@@ -84,7 +86,7 @@ You MUST respond ONLY with a valid JSON object in the following format, without 
 """
     return llm.invoke(prompt)
 
-def generate_followup_query(og_query: str, previous_answer: str) -> str:
+def generate_followup_query(og_query: str, previous_answer: GuidelineAnswer) -> str:
     llm = get_llm()
     prompt = f"""
 The original question was:

@@ -1,5 +1,5 @@
 from pydantic import ValidationError, BaseModel, field_validator, Field
-from typing import Optional, Literal
+from typing import Optional, Literal, List
 
 
 class CancerType(BaseModel):
@@ -35,15 +35,31 @@ class Json(BaseModel):
 
 
 class GuidelineAnswer(BaseModel):
-    recommended: str = Field(..., alias="Recommended")
-    to_consider: str = Field(..., alias="To consider")
-    not_recommended: str = Field(..., alias="Not recommended")
+    recommended: List[str] = Field(..., alias="Recommended")
+    to_consider: List[str] = Field(..., alias="To consider")
+    not_recommended: List[str] = Field(..., alias="Not recommended")
 
     @field_validator("*")
     def not_empty(cls, value):
-        if not value or not value.strip():
-            raise ValueError("Field cannot be empty")
-        return value
+        if not isinstance(value, list):
+            raise ValueError("Field must be a list")
+
+        if len(value) == 0:
+            raise ValueError("Field must not be empty")
+
+        cleaned_value = []
+        for item in value:
+            if not isinstance(item, str):
+                raise ValueError("Item must be a string")
+
+            item = item.strip()
+            if item:
+                cleaned_value.append(item)
+
+        if not cleaned_value:
+            raise ValueError("List cannot contain only empty items")
+
+        return cleaned_value
 
 
 def validate_json(data: dict) -> Json:

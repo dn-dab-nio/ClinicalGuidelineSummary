@@ -110,57 +110,52 @@ if "classification" in st.session_state:
             answers = guidelines.get("answers", {})
             metrics = guidelines.get("metrics", {})
 
+            #SUMMARY
             rows = []
-
             for org, data in answers.items():
                 rows.append({
                     "Organization": org,
-                    "Recommended": "✔" if data.recommended else "—",
-                    "To Consider": "✔" if data.to_consider else "—",
-                    "Not Recommended": "✔" if data.not_recommended else "—",
+                    "Recommended": len(data.recommended),
+                    "To Consider": len(data.to_consider),
+                    "Not Recommended": len(data.not_recommended),
                     "Iterations": metrics.get(org, {}).get("iterations_used", "N/A"),
                     "Status": metrics.get(org, {}).get("final_status", "N/A")
                 })
 
-            df_guidelines = pd.DataFrame(rows)
-            st.table(df_guidelines)
+            df = pd.DataFrame(rows)
+            st.dataframe(df, use_container_width=True)
 
 
-            def format_text(text: str):
-                if not text:
-                    return ["No information available"]
-
-                # rozbij po kropkach (prosty NLP hack)
-                sentences = [s.strip() for s in text.split(".") if s.strip()]
-
-                return sentences
-
-
+            #GUIDELINES
             st.subheader("Detailed Guidelines")
 
             cols = st.columns(len(answers))
-
             for col, (org, data) in zip(cols, answers.items()):
                 with col:
                     st.markdown(f"## {org}")
 
                     st.markdown("### 🟢 Recommended")
-                    rec_list = format_text(data.recommended)
+                    if data.recommended:
+                        for item in data.recommended:
+                            st.markdown(f"- {item}")
+                    else:
+                        st.write("No data")
 
-                    for r in rec_list[:5]:
-                        st.markdown(f"- {r}")
 
                     st.markdown("### 🟡 To Consider")
-                    consider_list = format_text(data.to_consider)
-
-                    for c in consider_list[:5]:
-                        st.markdown(f"- {c}")
+                    if data.to_consider:
+                        for item in data.to_consider:
+                            st.markdown(f"- {item}")
+                    else:
+                        st.write("No data")
 
                     st.markdown("### 🔴 Not Recommended")
-                    not_rec_list = format_text(data.not_recommended)
+                    if data.not_recommended:
+                        for item in data.not_recommended:
+                            st.markdown(f"- {item}")
+                    else:
+                        st.write("No data")
 
-                    for n in not_rec_list[:5]:
-                        st.markdown(f"- {n}")
 
                     st.markdown("---")
                     st.markdown("**Metrics**")

@@ -2,6 +2,7 @@ from src.staging.uicc_extractor import tnm_extract
 from src.rag.Vector_store import load_vector_store
 from src.rag.Embeddings import import_embedding_llm
 from staging.staging_pipeline import run_staging
+from src.rag.rag_engine import run_iterative_rag
 
 query = f"""
      Pacjentka 44 lata, brak narażenia na promieniowanie, brak rodzinnej historii raka tarczycy.
@@ -13,9 +14,46 @@ query = f"""
      """
 embeddings = import_embedding_llm()
 vectorstore = load_vector_store(embeddings)
+classification = { #DO TESTU
+            "age": 45,
+            "T": "T2",
+            "N": "N1",
+            "M": "M0",
+            "cancer_type": {
+                "label": "Papillary Thyroid Carcinoma",
+                "group": "Differentiated thyroid carcinoma"
+            },
+            "Stage": "Stage II",
+            "Bethesda_System_Category": "III (AUS)",
+            "USG": "Performed; hypoechogenic nodule 8 mm, irregular margins, suspected microcalcifications, no lymph node involvement",
+            "Biopsy": "Performed; fine‑needle aspiration"
+        }
 
-answer = run_staging(query, vectorstore)
-print(answer)
+
+quidelines = run_iterative_rag(vectorstore, classification, debug=False)
+
+print("\n--- THERAPY FOR PATIENT--- \n")
+
+for org in quidelines["answers"]:
+     result = quidelines["answers"][org]
+     metrics = quidelines["metrics"][org]
+
+     print(f"\n \n--- {org} ---")
+
+     print("\n Recommended: \n")
+     for item in result.recommended:
+         print(f"- {item} \n")
+
+     print("\n To consider: \n")
+     for item in result.to_consider:
+         print(f"- {item} \n")
+
+     print("\n Not recommended: \n")
+     for item in result.not_recommended:
+         print(f"- {item} \n")
+
+#answer = run_staging(query, vectorstore)
+#print(answer)
 
 #
 # classification_uicc = run_staging(query)
@@ -237,4 +275,12 @@ from src.rag.Embeddings import import_embedding_llm
 #             with st.expander("Debug metrics"):
 #                 st.json(metrics)
 
-
+# from src.validation.validator import validate_guideline_answer
+# exmpl = {
+#     "Recommended": ["a", "b"],
+#     "To consider": ["c", "d", ""],
+#     "Not recommended": ["e", "   f    "]
+# }
+#
+# tt = validate_guideline_answer(exmpl)
+# print(tt)
