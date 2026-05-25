@@ -1,7 +1,7 @@
 from langchain_ollama import OllamaLLM
 from src.rag.retriever import retrieve_context
 
-llm = OllamaLLM(model="gpt-oss")
+llm = OllamaLLM(model="gpt-oss", base_url="http://127.0.0.1:11434")
 
 def tnm_extract(patient_description: str, vectorstore):
     context = retrieve_context(vectorstore, patient_description)
