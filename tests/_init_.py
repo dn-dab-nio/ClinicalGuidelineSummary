@@ -56,225 +56,6 @@ for org in quidelines["answers"]:
 #print(answer)
 
 #
-# classification_uicc = run_staging(query)
-# print("--- CLASSIFICATION UICC/UJCC, 8th edition ---")
-# print(classification_uicc)
-#
-# quidelines = run_iterative_rag2(vectorstore, classification_uicc)
-#
-# print("--- THERAPY FOR PATIENT---")
-# for klucz, wartosc in quidelines.items():
-#     print(f"{klucz}: \n {wartosc} \n\n")
-#
-# end = time.perf_counter()
-# min = (end - start) / 60
-# print(f"Total time: {end - start:.4f} sec   ==   {min:.4f} min")
-#
-# process = psutil.Process(os.getpid())
-# print(f"Memory (MB): {process.memory_info().rss / 1024 ** 2:.2f}")
-# print(f"CPU (%): {psutil.cpu_percent(interval=1)}")
-
-
-# ziomek = {"wyniki": {"kot": 'kot', "pies": 'pis'}, "mmm": {"kot": {"dlugosc": 2, "siersc": 5}, "pies": {"dlugosc": 3, "siersc": 6}}}
-#
-# lol = ziomek["wyniki"]["pies"]
-#
-# for org in ziomek["wyniki"]:
-#     result = ziomek["wyniki"][org]
-#     metrics = ziomek["mmm"][org]
-#
-#     print(f"--- {org} ---")
-#     print(f"{result}")
-#     for m in metrics:
-#         print(f"{m}: {metrics[m]}")
-
-# from langchain_ollama import OllamaEmbeddings
-#
-# def import_embedding_llm():
-#     return OllamaEmbeddings(model="nomic-embed-text")
-#
-# import_embedding_llm()
-from src.rag.Vector_store import load_vector_store
-from src.rag.Embeddings import import_embedding_llm
-
-# embeddings = import_embedding_llm()
-#
-# vectorstore = load_vector_store(r"C:\Users\kuba_dr\ClinicalGuidelineSummary\src\scripts\vector_db", embeddings)
-# print(vectorstore.index.ntotal)
-# print(len(vectorstore.docstore._dict))
-#
-# results = vectorstore.similarity_search("test", k=3)
-# if vectorstore.index.ntotal == 0:
-#     print("Vectorstore jest pusty ")
-# else:
-#     print("Vectorstore zawiera dane  \n \n")
-#
-# for doc in vectorstore.docstore._dict.values():
-#     print(doc.metadata)
-#
-# for r in results:
-#     print(r.page_content[:200])
-#
-
-#####TEST
-# import streamlit as st
-# import pandas as pd
-# from src.staging.staging_pipeline import run_staging
-# from src.rag.rag_engine import run_iterative_rag
-# from src.rag.Vector_store import load_vector_store
-# from src.rag.Embeddings import import_embedding_llm
-#
-#
-# @st.cache_resource
-# def load_vs():
-#     embeddings = import_embedding_llm()
-#     return load_vector_store(embeddings)
-#
-#
-# st.set_page_config(layout="wide")
-# st.title('Clinical Guidelines Summary System')
-#
-# user_query = st.text_input("Enter a patient description...")
-#
-# ###
-# if st.button("Run Patient Classification"):
-#     if not user_query.strip():
-#         st.warning("Please enter a patient description...")
-#         st.stop()
-#
-#     vector_store = load_vs()
-#     st.header("Patient Classification (TNM + UICC)")
-#     with st.spinner("Running classification..."):
-#         #classification = run_staging(user_query, vector_store)
-#         classification = {
-#         "age": 45,
-#         "T": "T2",
-#         "N": "N1",
-#         "M": "M0",
-#         "cancer_type": {
-#             "label": "Papillary Thyroid Carcinoma",
-#             "group": "Differentiated thyroid carcinoma"
-#         }
-#     }
-#
-#     st.session_state["classification"] = classification
-#
-# if "classification" in st.session_state:
-#     st.header("Edit Patient Classification")
-#     cls = st.session_state["classification"]
-#     age = st.number_input("Age", value=int(cls.get("age", 0)))
-#     T = st.selectbox("T", ["TX", "T1", "T1a", "T1b", "T2", "T3", "T3a", "T3b", "T4a", "T4b"],
-#                      index=0 if not cls.get("T") else ["TX", "T1", "T1a", "T1b", "T2", "T3", "T3a", "T3b", "T4a",
-#                                                        "T4b"].index(cls.get("T")))
-#     N = st.selectbox("N", ["NX", "N0", "N0a", "N0b", "N1", "N1a", "N1b"],
-#                      index=0 if not cls.get("N") else ["NX", "N0", "N0a", "N0b", "N1", "N1a", "N1b"].index(
-#                          cls.get("N")))
-#     M = st.selectbox("M", ["MX", "M0", "M1"], index=0 if not cls.get("M") else ["MX", "M0", "M1"].index(cls.get("M")))
-#
-#     cancer = cls.get("cancer_type", {})
-#     label = cancer.get("label", "")
-#     group = cancer.get("group", "")
-#
-#     st.subheader("Cancer Type")
-#
-#     col1, col2 = st.columns(2)
-#     with col1:
-#         label_input = st.text_input("Label", value=label, help="e.g. Papillary thyroid carcinoma")
-#
-#     with col2:
-#         group_input = st.text_input("Group", ["Differentiated thyroid carcinoma", "Medullary thyroid carcinoma",
-#                                               "Anaplastic thyroid carcinoma"],
-#                                     index=0 if not group else ["Differentiated thyroid carcinoma",
-#                                                                "Medullary thyroid carcinoma",
-#                                                                "Anaplastic thyroid carcinoma"].index(group))
-#
-#     edited_classification = {
-#         "age": age,
-#         "T": T,
-#         "N": N,
-#         "M": M,
-#         "cancer_type": {
-#             "label": label_input,
-#             "group": group_input
-#         }
-#     }
-#
-#     st.session_state["edited_classification"] = edited_classification
-#
-#     if "edited_classification" in st.session_state:
-#         if st.button("Generate Guidelines"):
-#             st.header("Guidelines by Organization")
-#             with st.spinner("Generating guidelines..."):
-#                 guidelines = run_iterative_rag(vector_store, classification, debug=False)
-#
-#             if not guidelines:
-#                 st.error("No guidelines generated")
-#                 st.stop()
-#
-#             answers = guidelines.get("answers", {})
-#             metrics = guidelines.get("metrics", {})
-#
-#             rows = []
-#
-#             for org, data in answers.items():
-#                 rows.append({
-#                     "Organization": org,
-#                     "Recommended": "✔" if data.recommended else "—",
-#                     "To Consider": "✔" if data.to_consider else "—",
-#                     "Not Recommended": "✔" if data.not_recommended else "—",
-#                     "Iterations": metrics.get(org, {}).get("iterations_used", "N/A"),
-#                     "Status": metrics.get(org, {}).get("final_status", "N/A")
-#                 })
-#
-#             df_guidelines = pd.DataFrame(rows)
-#             st.table(df_guidelines)
-#
-#
-#             def format_text(text: str):
-#                 if not text:
-#                     return ["No information available"]
-#
-#                 # rozbij po kropkach (prosty NLP hack)
-#                 sentences = [s.strip() for s in text.split(".") if s.strip()]
-#
-#                 return sentences
-#
-#
-#             st.subheader("Detailed Guidelines")
-#
-#             cols = st.columns(len(answers))
-#
-#             for col, (org, data) in zip(cols, answers.items()):
-#                 with col:
-#                     st.markdown(f"## {org}")
-#
-#                     st.markdown("### 🟢 Recommended")
-#                     rec_list = format_text(data.recommended)
-#
-#                     for r in rec_list[:5]:
-#                         st.markdown(f"- {r}")
-#
-#                     st.markdown("### 🟡 To Consider")
-#                     consider_list = format_text(data.to_consider)
-#
-#                     for c in consider_list[:5]:
-#                         st.markdown(f"- {c}")
-#
-#                     st.markdown("### 🔴 Not Recommended")
-#                     not_rec_list = format_text(data.not_recommended)
-#
-#                     for n in not_rec_list[:5]:
-#                         st.markdown(f"- {n}")
-#
-#                     st.markdown("---")
-#                     st.markdown("**Metrics**")
-#                     st.write(f"Iterations: {metrics.get(org, {}).get('iterations_used', 'N/A')}")
-#                     st.write(f"Status: {metrics.get(org, {}).get('final_status', 'N/A')}")
-#                     st.write(f"Contexts used: {metrics.get(org, {}).get('contexts_used', 'N/A')}")
-#
-#             with st.expander("Debug metrics"):
-#                 st.json(metrics)
-
 # from src.validation.validator import validate_guideline_answer
 # exmpl = {
 #     "Recommended": ["a", "b"],
@@ -284,3 +65,55 @@ from src.rag.Embeddings import import_embedding_llm
 #
 # tt = validate_guideline_answer(exmpl)
 # print(tt)
+
+# (.venv) PS C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary> streamlit run app.py
+# Traceback (most recent call last):
+#   File "<frozen runpy>", line 198, in _run_module_as_main
+#   File "<frozen runpy>", line 88, in _run_code
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Scripts\streamlit.exe\__main__.py", line 7, in <module>
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\click\core.py", line 1485, in __call__
+#     return self.main(*args, **kwargs)
+#            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\click\core.py", line 1406, in main
+#     rv = self.invoke(ctx)
+#          ^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\click\core.py", line 1873, in invoke
+#     return _process_result(sub_ctx.command.invoke(sub_ctx))
+#                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\click\core.py", line 1269, in invoke
+#     return ctx.invoke(self.callback, **ctx.params)
+#            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\click\core.py", line 824, in invoke
+#     return callback(*args, **kwargs)
+#            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\streamlit\web\cli.py", line 238, in main_run
+#     _main_run(target, args, flag_options=kwargs)
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\streamlit\web\cli.py", line 274, in _main_run
+#     bootstrap.run(file, is_hello, args, flag_options)
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\streamlit\web\bootstrap.py", line 352, in run
+#     asyncio.run(run_server())
+#   File "C:\Users\natalia.nowak\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+#     return runner.run(main)
+#            ^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+#     return self._loop.run_until_complete(task)
+#            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+#     return future.result()
+#            ^^^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\streamlit\web\bootstrap.py", line 340, in run_server
+#     await server.start()
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\streamlit\web\server\server.py", line 270, in start
+#     start_listening(app)
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\streamlit\web\server\server.py", line 130, in start_listening
+#     start_listening_tcp_socket(http_server)
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\streamlit\web\server\server.py", line 197, in start_listening_tcp_socket
+#     http_server.listen(port, address)
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\tornado\tcpserver.py", line 183, in listen
+#     sockets = bind_sockets(
+#               ^^^^^^^^^^^^^
+#   File "C:\Users\natalia.nowak\Desktop\ClinicalGuidelineSummary\.venv\Lib\site-packages\tornado\netutil.py", line 162, in bind_sockets
+#     sock.bind(sockaddr)
+# PermissionError: [WinError 10013] Została podjęta próba uzyskania dostępu do gniazda w sposób zabroniony przez
+# przypisane do niego uprawnienia dostępu
+
