@@ -1,7 +1,7 @@
 from src.staging.uicc_extractor import tnm_extract
 from src.rag.Vector_store import load_vector_store
 from src.rag.Embeddings import import_embedding_llm
-from staging.staging_pipeline import run_staging
+#from staging.staging_pipeline import run_staging
 from src.rag.rag_engine import run_iterative_rag
 
 query = f"""

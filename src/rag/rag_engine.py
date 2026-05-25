@@ -1,6 +1,7 @@
 from src.rag.retriever import retrieve_context
 from src.rag.Generator import evaluate_answer, generate_followup_query, generate_guideline_answer
 from src.rag.query_compiler import build_data_query
+from src.rag.citation_retrieval import attach_citations
 import time
 import json
 
@@ -32,7 +33,8 @@ def run_iterative_rag(vectorstore, classification_json: dict, max_iterations: in
             iter_start = time.perf_counter()
 
             try:
-                context = retrieve_context(vectorstore, current_query, k=k, organisation=org)
+                retrieved_docs = retrieve_context(vectorstore, current_query, k=k, organisation=org)
+                context = "\n\n".join([doc.page_content for doc in retrieved_docs])
             except Exception as e:
                 print(f"[ERROR][{org}] Retrieval failed: {e}")
                 break
@@ -90,7 +92,6 @@ def run_iterative_rag(vectorstore, classification_json: dict, max_iterations: in
                 print(f"Status: {eval_status}")
                 print(f"Iteration time: {iter_time:.2f}s")
 
-            # NOWY, INTELIGENTNY WARUNEK STOPU
             if eval_status == "COMPLETE":
                 if debug:
                     print(f"[STOP] Answer complete at iteration {completed_iterations}")
@@ -103,7 +104,6 @@ def run_iterative_rag(vectorstore, classification_json: dict, max_iterations: in
             if i == max_iterations - 1:
                 break
 
-            # USTAWIENIE NOWEGO ZAPYTANIA (QUERY RELAXATION)
             try:
                 if suggested_query:
                     current_query = suggested_query
@@ -115,7 +115,19 @@ def run_iterative_rag(vectorstore, classification_json: dict, max_iterations: in
                 break
 
         org_time = time.perf_counter() - org_start
-        results[org] = answer
+
+        recommended_with_citations = attach_citations(vectorstore, answer.recommended, org)
+        consider_with_citations = attach_citations(vectorstore, answer.to_consider, org)
+        not_recommended_with_citations = attach_citations(vectorstore, answer.not_recommended, org)
+
+        final_answer = {
+            "recommended": recommended_with_citations,
+            "to_consider": consider_with_citations,
+            "not_recommended": not_recommended_with_citations
+        }
+
+
+        results[org] = final_answer
 
         metrics[org] = {
             "iterations_used": completed_iterations,
